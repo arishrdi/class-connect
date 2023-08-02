@@ -1,14 +1,13 @@
 import { useSession } from "next-auth/react";
-import React from "react";
-import { api } from "~/utils/api";
+
 import Head from "next/head";
-import { type NextPage } from "next";
-import CardClass from "~/components/CardClass";
+import React from "react";
+import CardJoinedClass from "~/components/CardJoinedClass";
+import { api } from "~/utils/api";
 
-const Home: NextPage = () => {
+const Page = () => {
   const { data: session } = useSession();
-  const { data: classes } = api.class.getAllClasses.useQuery();
-
+  const { data: classes } = api.joinClass.getAllJoinedClasses.useQuery();
   if (!session) {
     return null;
   }
@@ -20,11 +19,11 @@ const Home: NextPage = () => {
       <div className="grid grid-cols-4 gap-5">
         {classes &&
           classes.map((data) => {
-            return <CardClass data={data} key={data.id} />;
+            return <CardJoinedClass key={data.id} data={data} />;
           })}
       </div>
     </>
   );
 };
 
-export default Home;
+export default Page;
