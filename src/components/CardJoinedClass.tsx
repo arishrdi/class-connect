@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { type Class, type User } from "@prisma/client";
+import { type User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import PopoverMenu from "./ui/PopoverMenu";
@@ -26,6 +26,7 @@ type CardJoinedClassProps = {
     id: string;
     class: {
       user: User;
+      id: string;
       name: string;
       section: string | null;
       code: string;
@@ -40,7 +41,7 @@ const CardJoinedClass: React.FC<CardJoinedClassProps> = ({ data }) => {
     <Card className="group relative transition-all hover:shadow-lg">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          <Link href={`/d/${data.id}`}>{data.class.name}</Link>
+          <Link href={`/d/${data.class.id}`}>{data.class.name}</Link>
           <div className="-mr-4">
             <PopoverMenu label1="Leave" onAction1={() => setOpenModal(true)} />
             <LeaveClassModal id={data.id} label={data.class.name} open={openModal} onOpenChange={setOpenModal} />
@@ -91,7 +92,7 @@ const LeaveClassModal: React.FC<LeaveClassModalProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you sure to leave this class: {label}?</DialogTitle>
+          <DialogTitle>Leave this class: {label}?</DialogTitle>
           <DialogDescription>This action cannot be undo</DialogDescription>
         </DialogHeader>
         <DialogFooter>

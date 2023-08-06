@@ -31,9 +31,26 @@ export const classRouter = createTRPCRouter({
 
   getAllClasses: protectedProcedure.query(async ({ ctx }) => {
     try {
-      return await ctx.prisma.class.findMany({
+      return await ctx.prisma.user.findMany({
         where: {
-          userId: ctx.session.user.id,
+          id: ctx.session.user.id
+        },
+        include: {
+          joinClasses: {
+            select: {
+              // id: true,
+              class: {
+                include: {
+                  user: true
+                }
+              }
+            }
+          },
+          classes: {
+            include: {
+              user: true
+            }
+          },
         },
       });
     } catch (error) {
@@ -47,6 +64,18 @@ export const classRouter = createTRPCRouter({
         return await ctx.prisma.class.findUnique({
           where: {
             id: input.id,
+          },
+          select: {
+            user: {},
+            name: true,
+            createdAt: true,
+            section: true,
+            code: true,
+            id: true,
+            updatedAt: true,
+            userId: true,
+            // joinClasses: {},
+            materials: {}
           },
         });
       } catch (error) {

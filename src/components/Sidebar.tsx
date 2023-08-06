@@ -41,8 +41,20 @@ const Sidebar = () => {
           })}
         <SheetTitle>Enrolled</SheetTitle>
         {joinedClasses &&
-          joinedClasses.map((c) => {
-            return <Button key={c.id}>{c.class.name}</Button>;
+          joinedClasses.map((d) => {
+            // return <Button key={d.id}>{d.class.name}</Button>;
+            return (
+              <Button
+                key={d.id}
+                onClick={() => void handleSidebar(d.id)}
+                variant={
+                  router.asPath.includes(`/d/${d.class.id}`) ? "default" : "ghost"
+                }
+                className="w-full justify-self-start"
+              >
+                {d.class.name}
+              </Button>
+            );
           })}
       </SheetContent>
     </Sheet>

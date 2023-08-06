@@ -16,7 +16,7 @@ const JoinClassForm: React.FC<JoinClassFormProps> = ({ setOpenModal }) => {
   const joinClass = api.joinClass.joinClassWithCode.useMutation({
     async onSuccess(data) {
       setOpenModal(false);
-      await context.joinClass.invalidate();
+      await context.class.invalidate();
       toast({
         variant: !data?.status ? "destructive" : "default",
         title: data?.desription,

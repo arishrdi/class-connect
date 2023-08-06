@@ -40,6 +40,18 @@ export const materialRouter = createTRPCRouter({
         console.log(error);
       }
     }),
+  getSingleMaterial: protectedProcedure
+  .input(z.object({id: z.string()})).query(async({ctx, input}) => {
+    try {
+      return await ctx.prisma.material.findUnique({
+        where: {
+          id: input.id
+        }
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }),
   deleteMaterial: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {

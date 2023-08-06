@@ -1,6 +1,7 @@
 import { type Material } from "@prisma/client";
 import { FolderPlus } from "lucide-react";
 import { type NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
@@ -18,7 +19,7 @@ import { Input } from "~/components/ui/input";
 import TextEditor from "~/components/ui/texteditor";
 import { api } from "~/utils/api";
 
-const Page:NextPage = () => {
+const Page: NextPage = () => {
   const { register, handleSubmit, reset } = useForm<FieldValues>();
   const [text, setText] = useState<string | undefined>();
   const [resetEditor, setResetEditor] = useState(false);
@@ -27,10 +28,15 @@ const Page:NextPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
 
+  const { data: session } = useSession();
+
   const { data } = api.class.getSingleClass.useQuery({ id });
   const { data: materials, refetch } = api.material.getAllMaterials.useQuery({
     id,
   });
+
+  const isMyClass = data?.userId === session?.user.id;
+
   const postMaterial = api.material.postMaterial.useMutation({
     async onSuccess() {
       setResetEditor(true);
@@ -58,18 +64,24 @@ const Page:NextPage = () => {
     return null;
   }
 
+  // if (data?.userId !== session?.user.id) {
+  //   return null;
+  // }
+
   return (
     <>
       <Head>
         <title>{data?.name}</title>
       </Head>
       <Dialog open={openModal} onOpenChange={setOpenModal}>
-        <DialogTrigger>
-          <Button variant="ghost">
-            <FolderPlus size={20} className="mr-2"/>
-            New material
-          </Button>
-        </DialogTrigger>
+        {isMyClass && (
+          <DialogTrigger>
+            <Button variant="ghost">
+              <FolderPlus size={20} className="mr-2" />
+              New material
+            </Button>
+          </DialogTrigger>
+        )}
         <DialogContent className="min-w-full">
           <DialogTitle>New Material in {data?.name}</DialogTitle>
           <DialogDescription>{data?.section}</DialogDescription>

@@ -79,6 +79,7 @@ export const joinClassRouter = createTRPCRouter({
           class: {
             select: {
               user: {},
+              id: true,
               name: true,
               section: true,
               code: true,
@@ -91,13 +92,28 @@ export const joinClassRouter = createTRPCRouter({
       console.log(error);
     }
   }),
+  getJoinedClasses: protectedProcedure.query(async({ctx}) => {
+    try {
+      return await ctx.prisma.joinClass.findMany({
+        where: {
+          userId: ctx.session.user.id
+        },
+        select: {
+          class: {}
+        },
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }),
   leaveClass: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       try {
-        await ctx.prisma.joinClass.delete({
+        await ctx.prisma.joinClass.deleteMany({
           where: {
-            id: input.id,
+            classId: input.id,
+            userId: ctx.session.user.id
           },
         });
       } catch (error) {

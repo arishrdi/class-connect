@@ -12,17 +12,20 @@ import { Input } from "../ui/input";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { api } from "~/utils/api";
+import { IClass } from "../CardClass";
 
 type ModalDeleteClassProps = {
-  data: Class;
+  data: IClass;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  isMyClass: boolean;
 };
 
 const ModalDeleteClass: React.FC<ModalDeleteClassProps> = ({
   data,
   open,
   onOpenChange,
+  isMyClass,
 }) => {
   const [validName, setValidName] = useState(false);
   const { register, handleSubmit } = useForm<FieldValues>();
@@ -35,15 +38,29 @@ const ModalDeleteClass: React.FC<ModalDeleteClassProps> = ({
     },
   });
 
+  const leaveClass = api.joinClass.leaveClass.useMutation({
+    async onSuccess() {
+      await context.class.invalidate();
+      onOpenChange(false);
+    },
+  });
+
   const deleteClassHandler: SubmitHandler<Class> = () => {
-    deleteClass.mutate({ ...data });
+    if (isMyClass) {
+      deleteClass.mutate({ ...data });
+    } else {
+      leaveClass.mutate({id: data.id})
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you sure to delete {data.name}?</DialogTitle>
+          <DialogTitle>
+            {isMyClass ? "Are you sure to delete: " : "Leave this class: "}
+            {data.name}?
+          </DialogTitle>
           <DialogDescription>
             Deleting a class also removes the material within it
           </DialogDescription>
@@ -53,7 +70,9 @@ const ModalDeleteClass: React.FC<ModalDeleteClassProps> = ({
             onChange={(e) =>
               setValidName(e.target.value === data.name ? true : false)
             }
-            placeholder={`Type "${data.name}" to delete this class`}
+            placeholder={`Type "${data.name}" to ${
+              isMyClass ? "delete" : "leave"
+            } this class`}
             id="name"
             register={register}
           />
@@ -70,7 +89,7 @@ const ModalDeleteClass: React.FC<ModalDeleteClassProps> = ({
               variant={validName ? "default" : "disabled"}
               // onClick={deleteClassHandler}
             >
-              Delete
+              {isMyClass ? "Delete" : "Leave"}
             </Button>
           </DialogFooter>
         </form>

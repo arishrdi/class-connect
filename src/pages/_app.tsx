@@ -20,7 +20,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <main className={nunito.className}>
         <Navbar />
-        <div className="px-5">
+        <div className="px-5 pt-16">
           <Component {...pageProps} />
         </div>
         <Toaster />

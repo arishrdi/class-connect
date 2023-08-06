@@ -18,7 +18,9 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        disabled: "bg-primary/50 text-primary-foreground cursor-not-allowed"
+        disabled: "bg-primary/50 text-primary-foreground cursor-not-allowed",
+        tab: "hover:bg-accent hover:text-accent-foreground rounded-none text-secondary-foreground",
+        tabActive: 'hover:bg-accent hover:text-accent-foreground rounded-none border-b-2 border-primary'
       },
       size: {
         default: "h-10 px-4 py-2",
