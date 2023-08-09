@@ -92,16 +92,16 @@ export const joinClassRouter = createTRPCRouter({
       console.log(error);
     }
   }),
-  getJoinedClasses: protectedProcedure.query(async({ctx}) => {
+  getJoinedClasses: protectedProcedure.query(async ({ ctx }) => {
     try {
       return await ctx.prisma.joinClass.findMany({
         where: {
-          userId: ctx.session.user.id
+          userId: ctx.session.user.id,
         },
         select: {
-          class: {}
+          class: {},
         },
-      })
+      });
     } catch (error) {
       console.log(error);
     }
@@ -113,7 +113,37 @@ export const joinClassRouter = createTRPCRouter({
         await ctx.prisma.joinClass.deleteMany({
           where: {
             classId: input.id,
-            userId: ctx.session.user.id
+            userId: ctx.session.user.id,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }),
+  getPeoples: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      try {
+        return await ctx.prisma.joinClass.findMany({
+          where: {
+            classId: input.id,
+          },
+          include: {
+            user: true,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }),
+  removePeople: protectedProcedure
+    .input(z.object({ classId: z.string(), userId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.prisma.joinClass.deleteMany({
+          where: {
+            classId: input.classId,
+            userId: input.userId,
           },
         });
       } catch (error) {

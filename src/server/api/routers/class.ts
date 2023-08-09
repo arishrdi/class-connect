@@ -48,7 +48,8 @@ export const classRouter = createTRPCRouter({
           },
           classes: {
             include: {
-              user: true
+              user: true,
+              materials: true
             }
           },
         },

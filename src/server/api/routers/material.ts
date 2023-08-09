@@ -28,9 +28,13 @@ export const materialRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       try {
-        return await ctx.prisma.material.findMany({
+        return await ctx.prisma.class.findMany({
           where: {
-            classId: input.id,
+            id: input.id,
+          },
+          include: {
+            materials: true,
+            user: true,
           },
           orderBy: {
             createdAt: "desc",

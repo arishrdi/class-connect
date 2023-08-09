@@ -1,4 +1,4 @@
-import { type Material } from "@prisma/client";
+import { type Class, type Material } from "@prisma/client";
 import React, { useState } from "react";
 import {
   Collapsible,
@@ -20,14 +20,25 @@ import { api } from "~/utils/api";
 import { Input } from "./ui/input";
 import TextEditor from "./ui/texteditor";
 import { type FieldValues, type SubmitHandler, useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
+import { View } from "lucide-react";
+import { Pencil } from "lucide-react";
+import { Trash } from "lucide-react";
+import Link from "next/link";
 
 interface CollapasibleMaterialProps {
+  classData: Class;
   material: Material;
+  idUser?: string;
 }
 
 const CollapsibleMaterial: React.FC<CollapasibleMaterialProps> = ({
   material,
+  idUser,
+  classData,
 }) => {
+  const { data: session } = useSession();
+  const isMyClass = idUser === session?.user.id;
   const [open, setOpen] = useState(false);
   const [openModalDelete, setModalDelete] = useState(false);
   const [openModalEdit, setModalEdit] = useState(false);
@@ -35,6 +46,7 @@ const CollapsibleMaterial: React.FC<CollapasibleMaterialProps> = ({
   return (
     <Collapsible
       open={open}
+      // defaultOpen={isMyClass}
       onOpenChange={setOpen}
       className={`rounded-lg ${
         !open ? "hover:bg-primary/5" : "mb-5 hover:shadow-md"
@@ -57,8 +69,8 @@ const CollapsibleMaterial: React.FC<CollapasibleMaterialProps> = ({
           </div>
         </CollapsibleTrigger>
         <PopoverMenu
-          label1="Edit"
-          label2="Delete"
+          label1={isMyClass ? "Edit" : "Copy Link"}
+          label2={isMyClass ? "Delete" : ""}
           onAction1={() => setModalEdit(true)}
           onAction2={() => setModalDelete(true)}
         />
@@ -76,11 +88,40 @@ const CollapsibleMaterial: React.FC<CollapasibleMaterialProps> = ({
       </div>
       <CollapsibleContent className="rounded-lg border">
         <article
-          className="prose !max-w-full p-6 prose-p:-my-1 prose-li:-my-2"
+          className="prose !max-w-full border-b-2 p-6 prose-p:-my-1 prose-li:-my-2"
           dangerouslySetInnerHTML={{
             __html: material.description as TrustedHTML,
           }}
         ></article>
+        <div className="m-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {isMyClass && (
+              <>
+                <Button
+                  variant={"ghost"}
+                  size={"icon"}
+                  className="rounded-full"
+                  onClick={() => setModalEdit(true)}
+                >
+                  <Pencil />
+                </Button>
+                <Button
+                  variant={"ghost"}
+                  size={"icon"}
+                  className="rounded-full"
+                  onClick={() => setModalDelete(true)}
+                >
+                  <Trash />
+                </Button>
+              </>
+            )}
+          </div>
+          <Link href={`/c/${classData.id}/${material.id}/detail`}>
+            <Button className="" variant="ghost">
+              <View className="mr-1" /> View More
+            </Button>
+          </Link>
+        </div>
       </CollapsibleContent>
     </Collapsible>
   );

@@ -3,6 +3,7 @@ import { FolderPlus } from "lucide-react";
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { type FieldValues, useForm, type SubmitHandler } from "react-hook-form";
@@ -73,36 +74,49 @@ const Page: NextPage = () => {
       <Head>
         <title>{data?.name}</title>
       </Head>
-      <Dialog open={openModal} onOpenChange={setOpenModal}>
+      <div className="flex items-center justify-between">
+        <Link href={`/c/${id}/people`}>
+          <Button variant={"ghost"}>People</Button>
+        </Link>
         {isMyClass && (
-          <DialogTrigger>
-            <Button variant="ghost">
-              <FolderPlus size={20} className="mr-2" />
-              New material
-            </Button>
-          </DialogTrigger>
+          <Dialog open={openModal} onOpenChange={setOpenModal}>
+            <DialogTrigger>
+              <Button variant="ghost">
+                <FolderPlus size={20} className="mr-2" />
+                New material
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="min-w-full">
+              <DialogTitle>New Material in {data?.name}</DialogTitle>
+              <DialogDescription>{data?.section}</DialogDescription>
+              <form onSubmit={handleSubmit(submitHandler)} className="">
+                <Input id="title" register={register} label="Title" required />
+                <TextEditor
+                  label="Description"
+                  htmlContent={(html) => setText(html)}
+                  clearContent={resetEditor}
+                  className=""
+                />
+                <Button type="submit">Create</Button>
+              </form>
+            </DialogContent>
+          </Dialog>
         )}
-        <DialogContent className="min-w-full">
-          <DialogTitle>New Material in {data?.name}</DialogTitle>
-          <DialogDescription>{data?.section}</DialogDescription>
-          <form onSubmit={handleSubmit(submitHandler)} className="">
-            <Input id="title" register={register} label="Title" required />
-            <TextEditor
-              label="Description"
-              htmlContent={(html) => setText(html)}
-              clearContent={resetEditor}
-              className=""
-            />
-            <Button type="submit">Create</Button>
-          </form>
-        </DialogContent>
-      </Dialog>
+      </div>
+
       <div className="mt-5 grid grid-cols-1 divide-y">
         {materials &&
           materials.map((material) => {
-            return (
-              <CollapsibleMaterial key={material.id} material={material} />
-            );
+            return material.materials.map((item) => {
+              return (
+                <CollapsibleMaterial
+                  classData={material}
+                  key={material.id}
+                  material={item}
+                  idUser={material.userId}
+                />
+              );
+            });
           })}
       </div>
     </>

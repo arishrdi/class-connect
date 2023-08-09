@@ -1,3 +1,4 @@
+// Dihapus
 import { type Class, type Material } from "@prisma/client";
 import Link from "next/link";
 import React from "react";

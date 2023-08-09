@@ -23,27 +23,10 @@ const Navbar = () => {
       <div className="flex items-center gap-1">
         {data && <Sidebar />}
         <Link href="/">ClassConnect</Link>
-        {classes && <Link href={'/'}>{classes.name}</Link>}
+        {classes && <Link href={`/c/${classes.id}`}> | {classes.name}</Link>}
       </div>
       <div className="space-x-20">
-        {data ? (
-          <>
-            <Button
-              variant={router.asPath === "/" ? "tabActive" : "tab"}
-              className=""
-            >
-              <Link href="/">My Class</Link>
-            </Button>
-            <Button
-              variant={router.asPath === "/d" ? "tabActive" : "tab"}
-              className="-my-3"
-            >
-              <Link href="/d">Enrolled Class</Link>
-            </Button>
-          </>
-        ) : (
-          <Link href="/about">About</Link>
-        )}
+        {!data && <Link href="/about">About</Link>}
       </div>
       <div className="flex items-center">
         {data && <ModalClass />}

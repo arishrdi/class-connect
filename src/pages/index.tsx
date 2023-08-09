@@ -14,21 +14,15 @@ const Home: NextPage = () => {
   
   useEffect(() => {
     if (classes !== undefined) {
-      // const idClass = classes[0]?.joinClasses.map((item) => item.id) ?? []
-      // console.log("ID", idClass);
       const joinClasses = classes[0]?.joinClasses ?? [];
       const myClasses = classes[0]?.classes ?? [];
       const mergedArray = [
         ...joinClasses.map((item) => item.class),
         ...myClasses,
       ];
-      // console.log("Merge", mergedArray);
-      
       setClassesData(mergedArray);
     }
   }, [classes]);
-
-  // console.log("AllClass => ", classesData);
 
   if (!session) {
     return null;
