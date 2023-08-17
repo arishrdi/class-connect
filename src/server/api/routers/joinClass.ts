@@ -130,6 +130,7 @@ export const joinClassRouter = createTRPCRouter({
           },
           include: {
             user: true,
+            class: true
           },
         });
       } catch (error) {

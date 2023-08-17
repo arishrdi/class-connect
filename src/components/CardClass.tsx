@@ -59,6 +59,11 @@ const CardClass: React.FC<CardClassProps> = ({ data }) => {
           <Link href={`/c/${data.id}`} className="line-clamp-2">
             {data.section}
           </Link>
+          {!isMyClass && (
+            <Link href={`/c/${data.id}`} className="line-clamp-2">
+              {data.user.name}
+            </Link>
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent>

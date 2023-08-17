@@ -52,13 +52,13 @@ const TextEditor: React.FC<TextEditorProps> = ({
       <label htmlFor={label} className="text-sm font-semibold">
         {label}
       </label>
-      <div className={`prose grid !max-w-full grid-rows-1 prose-p:my-0 prose-li:-my-2 ${className as string}`}>
+      <div className={`prose dark:text-white  grid !max-w-full grid-rows-1 prose-p:my-0 prose-li:-my-2 ${className as string}`}>
         <EditorContent editor={editor} />
         {editor && (
           <BubbleMenu
             editor={editor}
             tippyOptions={{ duration: 200 }}
-            className="bg-white"
+            className="bg-white dark:bg-background"
           >
             <Button
               type="button"

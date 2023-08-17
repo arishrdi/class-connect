@@ -2,12 +2,12 @@ import { type Material } from "@prisma/client";
 import { FolderPlus } from "lucide-react";
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { type FieldValues, useForm, type SubmitHandler } from "react-hook-form";
-import CollapsibleMaterial from "~/components/CollapsibleMaterial";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -19,6 +19,13 @@ import {
 import { Input } from "~/components/ui/input";
 import TextEditor from "~/components/ui/texteditor";
 import { api } from "~/utils/api";
+
+const DynamicMaterial = dynamic(
+  () => import("~/components/CollapsibleMaterial"),
+  {
+    loading: () => <p>Loading....</p>,
+  }
+);
 
 const Page: NextPage = () => {
   const { register, handleSubmit, reset } = useForm<FieldValues>();
@@ -81,7 +88,7 @@ const Page: NextPage = () => {
         {isMyClass && (
           <Dialog open={openModal} onOpenChange={setOpenModal}>
             <DialogTrigger>
-              <Button variant="ghost">
+              <Button variant="ghost" className="text-primary hover:text-primary">
                 <FolderPlus size={20} className="mr-2" />
                 New material
               </Button>
@@ -109,7 +116,7 @@ const Page: NextPage = () => {
           materials.map((material) => {
             return material.materials.map((item) => {
               return (
-                <CollapsibleMaterial
+                <DynamicMaterial
                   classData={material}
                   key={material.id}
                   material={item}

@@ -18,8 +18,8 @@ const ModalClass = () => {
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger>
-        <Button variant="ghost" size="icon" className="mr-5 rounded-full">
-          <Plus />
+        <Button variant="ghost" size="icon" className="rounded-full">
+          <Plus size={19} />
         </Button>
       </DialogTrigger>
       <DialogContent className="!top-40 !translate-y-0">

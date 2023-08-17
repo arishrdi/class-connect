@@ -88,7 +88,7 @@ const CollapsibleMaterial: React.FC<CollapasibleMaterialProps> = ({
       </div>
       <CollapsibleContent className="rounded-lg border">
         <article
-          className="prose !max-w-full border-b-2 p-6 prose-p:-my-1 prose-li:-my-2"
+          className="prose dark:text-slate-400 dark:prose-headings:text-white  !max-w-full border-b-2 p-6 prose-p:-my-1 prose-li:-my-2"
           dangerouslySetInnerHTML={{
             __html: material.description as TrustedHTML,
           }}

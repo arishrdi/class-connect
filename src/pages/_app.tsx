@@ -6,6 +6,7 @@ import "~/styles/globals.css";
 import Navbar from "~/components/Navbar";
 import { Nunito } from "next/font/google";
 import { Toaster } from "~/components/ui/toaster";
+import { ThemeProvider } from "~/components/ui/theme-provider";
 
 const nunito = Nunito({
   weight: ["400", "700"],
@@ -18,13 +19,15 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <main className={nunito.className}>
-        <Navbar />
-        <div className="px-5 pt-16">
-          <Component {...pageProps} />
-        </div>
-        <Toaster />
-      </main>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <main className={nunito.className}>
+          <Navbar />
+          <div className="px-5 pt-20">
+            <Component {...pageProps} />
+          </div>
+          <Toaster />
+        </main>
+      </ThemeProvider>
     </SessionProvider>
   );
 };
